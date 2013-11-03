@@ -161,12 +161,12 @@ do
 done
 
 cd $BASE_DIR
-
-ENV_SOURCED_SEARCH=`grep $BASE_DIR/env.sh ~/.bashrc`
+WORKSPACE_SETUP_SCRIPT="$BASE_DIR/../../setup_env.bash"
+ENV_SOURCED_SEARCH=`grep $BASE_DIR/env.sh $WORKSPACE_SETUP_SCRIPT`
 
 if [[ ${#ENV_SOURCED_SEARCH} == 0 ]]
 then
-    echo "source $BASE_DIR/env.sh" >> ~/.bashrc
+    echo "source $BASE_DIR/env.sh" >> $WORKSPACE_SETUP_SCRIPT
 fi
  
 #Strip out base folder definition and update with current
@@ -197,11 +197,16 @@ then
     OPENHUBO_CURRENT_LINK_TARGET=$(readlink $OPENHUBO_BIN_PATH)
 fi
 #TODO: simplify this part
-if [[ ! $OPENHUBO_LOCAL_EXEC_PATH == $OPENHUBO_CURRENT_LINK_TARGET ]]
-then
-    OPENHUBO_LINK='/usr/local/bin/openhubo'
-    echo -e "\nCreating openhubo symlink at $OPENHUBO_LINK"
-    sudo ln -sf $BASE_DIR/openhubo/bin/openhubo $OPENHUBO_LINK
-else
-    echo -e "\nopenhubo symlink found at $OPENHUBO_CURRENT_LINK_TARGET"
-fi
+#if [[ ! $OPENHUBO_LOCAL_EXEC_PATH == $OPENHUBO_CURRENT_LINK_TARGET ]]
+#then
+#    OPENHUBO_LINK='/usr/local/bin/openhubo'
+#    echo -e "\nCreating openhubo symlink at $OPENHUBO_LINK"
+#    sudo ln -sf $BASE_DIR/openhubo/bin/openhubo $OPENHUBO_LINK
+#else
+#    echo -e "\nopenhubo symlink found at $OPENHUBO_CURRENT_LINK_TARGET"
+#fi
+echo '************************************'
+echo "This version of openhubo DOES NOT install itself in the bin directory or the bashrc"
+echo "\n The env.sh will be added to the setup.bash two levels above this directory, which corresponds to the catkin_ws_root"
+
+read -p "Press any key to continue"
